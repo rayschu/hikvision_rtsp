@@ -34,7 +34,7 @@ def check_vul(host, payload):
 	soc.send(payload)
 	soc.close()
 
-	sleep(0.2)  # sleep to wait server crash
+	sleep(0.2)
 	soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		soc.connect((host, 554))
