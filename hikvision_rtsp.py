@@ -34,7 +34,7 @@ def check_vuln(host, payload):
 	try:
 		soc.connect((host, 554))
 	except socket.error:
-		print(host + " port 554 may not open")
+		print(host + " port 554 is closed")
 		return False
 	soc.send(payload)
 	soc.close()
