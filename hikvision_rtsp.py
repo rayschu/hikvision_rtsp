@@ -29,8 +29,13 @@ def cve20144880(host):
 	return payload
 
 def check_vuln(host, payload):
+	socket.setdefaulttimeout(2)
 	soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	soc.connect((host, 554))
+	try:
+		soc.connect((host, 554))
+	except socket.error:
+		print(host + " port 554 may not open")
+		return False
 	soc.send(payload)
 	soc.close()
 
